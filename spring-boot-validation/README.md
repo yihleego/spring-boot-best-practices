@@ -12,7 +12,9 @@
 
 本文中示例基于`Java 8`和`Spring Boot 2.6.x`，若您使用`Spring Boot 3.0.0`及以上的版本，需要将`Java EE`相关依赖迁移至`Jakarta EE`。
 
-## 添加依赖
+## 准备工作
+
+通过`Maven`添加`Spring Boot`依赖。
 
 ```xml
 <dependencies>
@@ -89,8 +91,6 @@ GET http://localhost:8080/testNotNull
 
 HTTP/1.1 400 
 Content-Type: text/plain;charset=UTF-8
-Content-Length: 12
-Connection: close
 
 无效数据
 ```
@@ -100,9 +100,6 @@ GET http://localhost:8080/testNotNull?value=hello
 
 HTTP/1.1 200 
 Content-Type: application/json
-Transfer-Encoding: chunked
-Keep-Alive: timeout=60
-Connection: keep-alive
 
 true
 ```
@@ -206,8 +203,6 @@ GET http://localhost:8080/testPhone?phone=110
 
 HTTP/1.1 400 
 Content-Type: text/plain;charset=UTF-8
-Content-Length: 27
-Connection: close
 
 手机号码格式不正确
 ```
@@ -217,9 +212,6 @@ GET http://localhost:8080/testPhone?phone=13888888888
 
 HTTP/1.1 200 
 Content-Type: application/json
-Transfer-Encoding: chunked
-Keep-Alive: timeout=60
-Connection: keep-alive
 
 true
 ```
@@ -351,8 +343,6 @@ GET http://localhost:8080/testUsername?username=hello
 
 HTTP/1.1 400 
 Content-Type: text/plain;charset=UTF-8
-Content-Length: 24
-Connection: close
 
 用户名格式不正确
 ```
@@ -362,9 +352,6 @@ GET http://localhost:8080/testUsername?username=username
 
 HTTP/1.1 200 
 Content-Type: application/json
-Transfer-Encoding: chunked
-Keep-Alive: timeout=60
-Connection: keep-alive
 
 true
 ```
@@ -484,9 +471,6 @@ GET http://localhost:8080/testGender
 
 HTTP/1.1 200 
 Content-Type: application/json
-Transfer-Encoding: chunked
-Keep-Alive: timeout=60
-Connection: keep-alive
 
 true
 ```
@@ -496,8 +480,6 @@ GET http://localhost:8080/testGender?gender=100
 
 HTTP/1.1 400 
 Content-Type: text/plain;charset=UTF-8
-Content-Length: 21
-Connection: close
 
 性别格式不正确
 ```
@@ -507,9 +489,6 @@ GET http://localhost:8080/testGender?gender=0
 
 HTTP/1.1 200 
 Content-Type: application/json
-Transfer-Encoding: chunked
-Keep-Alive: timeout=60
-Connection: keep-alive
 
 true
 ```
@@ -557,5 +536,4 @@ cd spring-boot-best-practices/spring-boot-validation
 [Apollo]:https://www.apolloconfig.com/
 
 [spring-boot-validation]:https://github.com/yihleego/spring-boot-best-practices/tree/main/spring-boot-validation
-
 

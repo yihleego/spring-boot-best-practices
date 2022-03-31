@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>spring-boot-message</module>
         <module>spring-boot-validation</module>
     </modules>
 
