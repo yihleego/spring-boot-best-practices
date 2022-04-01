@@ -35,7 +35,6 @@ Spring提供了三种`MessageSource`实现：`ResourceBundleMessageSource`、`Re
 
        String getMessage(MessageSourceResolvable resolvable,Locale locale)throws NoSuchMessageException;
 
-
 加载`ApplicationContext`时，它会自动搜索上下文中定义的`MessageSource`bean，且`name`必须是`messageSource`。
 
 如果存在这样的bean，那么上述方法的所有调用都将委托给消息源。
@@ -160,7 +159,7 @@ Message is missing
 定义一个名为`Result`的结果包装类，如下：
 
 ```java
-public class Result<T>{
+public class Result<T> {
     private T data;
     private Boolean success;
     private String message;
