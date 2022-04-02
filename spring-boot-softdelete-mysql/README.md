@@ -35,13 +35,13 @@
 ```sql
 create table user
 (
-    id           bigint primary key auto_increment not null,
-    username     varchar(20)                       not null,
-    password     varchar(40)                       not null,
-    deleted      bigint default 0                  not null,
-    created_time datetime                          not null,
-    updated_time datetime                          null,
-    deleted_time datetime                          null,
+    id           bigint primary key auto_increment not null comment '自增主键',
+    username     varchar(20)                       not null comment '用户名',
+    password     varchar(40)                       not null comment '密码',
+    deleted      bigint default 0                  not null comment '删除标识 0:未删除 其他:已删除',
+    created_time datetime                          not null comment '创建时间',
+    updated_time datetime                          null comment '更新时间',
+    deleted_time datetime                          null comment '删除时间',
     constraint uk_user_username unique (username, deleted)
 );
 ```
@@ -55,31 +55,33 @@ create table user
 
 ## 验证
 
+首先我们通过`SQL`初步验证逻辑删除的可行性。
+
 1. 首先新增一条数据。
 
-   ```sql
-   insert user (id, username, password, deleted, created_time)
-   values (100, 'username', 'password', 0, now());
-   ```
+    ```sql
+    insert user (id, username, password, deleted, created_time)
+    values (100, 'username', 'password', 0, now());
+    ```
 
 2. 然后将其标记为已删除。
 
-   ```sql
-   update user
-   set deleted=id,
-       deleted_time=now()
-   where id = 100;
-   ```
+    ```sql
+    update user
+    set deleted=id,
+        deleted_time=now()
+    where id = 100;
+    ```
 
 3. 再新增一条相同`username`值的数据。
 
-   ```sql
-   insert user (id, username, password, deleted, created_time)
-   values (200, 'username', 'password', 0, now());
-   ```
-
-   此时数据如下：
-
+    ```sql
+    insert user (id, username, password, deleted, created_time)
+    values (200, 'username', 'password', 0, now());
+    ```
+    
+    此时数据如下：
+    
     | id  | username | password | deleted | created_time        | updated_time | deleted_time        |
     |:----|:---------|:---------|:--------|:--------------------|:-------------|:--------------------|
     | 100 | username | password | 100     | 2022-01-01 00:00:20 |              | 2022-01-01 00:00:39 |
@@ -87,17 +89,17 @@ create table user
 
 4. 如果再新增一条相同`username`值的数据，则会提示：`Duplicate entry 'username-0' for key 'user.uk_user_username'`。
 
-   ```sql
-   # Failed
-   insert user (id, username, password, deleted, created_time)
-   values (300, 'username', 'password', 0, now());
-   ```
+    ```sql
+    # Failed
+    insert user (id, username, password, deleted, created_time)
+    values (300, 'username', 'password', 0, now());
+    ```
 
 显然，以上流程的结果符合我们对“逻辑删除不影响唯一索引”的期望。
 
-## JPA中实现逻辑删除
+## 使用Spring Data JPA实现逻辑删除
 
-首先在项目添加`spring-boot-starter-data-jpa`和`mysql-connector-java`依赖。
+首先在项目中添加`spring-boot-starter-data-jpa`和`mysql-connector-java`依赖。
 
 ```xml
 <dependencies>
@@ -387,7 +389,11 @@ public interface DeletableRepository<T extends DeletableEntity<ID>, ID extends S
 
 我们几乎可以零学习成本的方式实现逻辑删除，保留有价值的数据同时，也能满足业务需求。
 
-但这并不代表逻辑删除是完美无缺的，由于被逻辑删除的数据依旧保留在数据库中，因此随着时间推移，此类业务中“无用”的数据会越来越多，从而影响正常业务的查询效率。解决方法也有很多，例如：定期将“已删除”的数据打包存档。
+但这并不代表本例中逻辑删除的方案是完美无缺的，由于被逻辑删除的数据依旧保留在数据库中，因此随着时间推移，此类业务中“无用”的数据会越来越多，从而影响正常业务的查询效率。解决方法也有很多，例如：定期将“已删除”的数据打包存档。
+
+下一期我们聊聊`MongoDB`逻辑删除的实现方案。
+
+[Spring Boot 数据库逻辑删除最佳实践（MongoDB篇）](../spring-boot-softdelete-mongodb/README.md)
 
 ## 示例源码
 

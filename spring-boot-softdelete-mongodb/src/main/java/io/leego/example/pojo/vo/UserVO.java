@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserVO {
-    private Long id;
+    private String id;
     private String username;
     private String password;
     private LocalDateTime createdTime;

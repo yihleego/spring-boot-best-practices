@@ -5,6 +5,7 @@ import io.leego.example.pojo.dto.UserCreateDTO;
 import io.leego.example.pojo.dto.UserUpdateDTO;
 import io.leego.example.pojo.vo.UserVO;
 import io.leego.example.repository.UserRepository;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SoftDeleteController {
     private final UserRepository userRepository;
+    private final MongoTemplate mongoTemplate;
 
-    public SoftDeleteController(UserRepository userRepository) {
+    public SoftDeleteController(UserRepository userRepository, MongoTemplate mongoTemplate) {
         this.userRepository = userRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @GetMapping("users/{id}")
-    public UserVO getUser(@PathVariable Long id) {
+    public UserVO getUser(@PathVariable String id) {
         return userRepository.findById(id).map(this::toVO).orElse(null);
     }
 
@@ -52,9 +55,21 @@ public class SoftDeleteController {
     }
 
     @DeleteMapping("users/{id}")
-    public int deleteUser(@PathVariable Long id) {
-        //return userRepository.softdeleteById(id);
+    public int deleteUser(@PathVariable String id) {
+        //mongoTemplate.remove(Query.query(new Criteria("_id").is(id)), User.class);
         userRepository.deleteById(id);
+        return 1;
+    }
+
+    @DeleteMapping(value = "users/{username}", params = "type=username")
+    public int deleteUserByUsername(@PathVariable String username) {
+        //mongoTemplate.remove(Query.query(new Criteria("username").is(username)), User.class);
+        return userRepository.deleteByUsername(username);
+    }
+
+    @DeleteMapping("users/all")
+    public int deleteAllUsers() {
+        userRepository.deleteAll();
         return 1;
     }
 
