@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Leego Yih
  */
 @RestController
-public class SoftDeleteController {
+public class ReadWriteSplittingController {
     private final UserRepository userRepository;
 
-    public SoftDeleteController(UserRepository userRepository) {
+    public ReadWriteSplittingController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -57,7 +57,6 @@ public class SoftDeleteController {
     @Transactional
     @DeleteMapping("users/{id}")
     public int deleteUser(@PathVariable Long id) {
-        //return userRepository.softdeleteById(id);
         userRepository.deleteById(id);
         return 1;
     }

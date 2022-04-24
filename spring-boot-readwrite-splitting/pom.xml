@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.leego</groupId>
-    <artifactId>spring-boot-softdelete-mysql</artifactId>
+    <artifactId>spring-boot-readwrite-splitting</artifactId>
     <version>1.0.0</version>
 
     <properties>
@@ -16,6 +16,7 @@
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <apt-maven-plugin.version>1.1.3</apt-maven-plugin.version>
         <spring-boot.version>2.6.6</spring-boot.version>
+        <shardingsphere.version>5.1.1</shardingsphere.version>
     </properties>
 
     <build>
@@ -71,6 +72,11 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+            <version>${shardingsphere.version}</version>
         </dependency>
     </dependencies>
 
